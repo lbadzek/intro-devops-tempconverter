@@ -24,7 +24,7 @@ services:
     image: lbadccek/tempconverter:latest
 
     environment:
-      DB_HOST: db
+      DB_HOST: tempconverter_db
       DB_USER: tempuser
       DB_PASS: temppassword123
       DB_NAME: tempconverter
