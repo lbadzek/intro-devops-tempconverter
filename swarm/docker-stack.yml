@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+
+  db:
+    image: mysql:8
+
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword123
+      MYSQL_DATABASE: tempconverter
+      MYSQL_USER: tempuser
+      MYSQL_PASSWORD: temppassword123
+
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+    networks:
+      - tempconverter-network
+
+    deploy:
+      replicas: 1
+
+  app:
+    image: lbadccek/tempconverter:latest
+
+    environment:
+      DB_HOST: db
+      DB_USER: tempuser
+      DB_PASS: temppassword123
+      DB_NAME: tempconverter
+      STUDENT: Luka Badzek
+      COLLEGE: Algebra Bernays University
+
+    ports:
+      - "80:5000"
+
+    networks:
+      - tempconverter-network
+
+    deploy:
+      replicas: 2
+
+      placement:
+        preferences:
+          - spread: node.id
+
+networks:
+  tempconverter-network:
+    driver: overlay
+
+volumes:
+  mysql-data:
