@@ -15,4 +15,7 @@ def test_home_page():
     response = client.get("/")
 
     assert response.status_code == 200
-    assert b"Celsius to Fahrenheit Converter" in response.data
+    assert b"Celsius to Fahrenheit" in response.data
+    assert b"TempConverter" in response.data
+    assert b"Luka Badzek" in response.data
+    assert b"Algebra Bernays University" in response.data
