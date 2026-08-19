@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: tempconverter-app
+  namespace: tempconverter
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: tempconverter
+
+  template:
+    metadata:
+      labels:
+        app: tempconverter
+
+    spec:
+      containers:
+        - name: tempconverter
+
+          image: lbadccek/tempconverter:latest
+
+          ports:
+            - containerPort: 5000
+
+          env:
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: tempconverter-secret
+                  key: DB_USER
+
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: tempconverter-secret
+                  key: DB_PASS
+
+            - name: DB_HOST
+              value: mysql
+
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: tempconverter-secret
+                  key: DB_NAME
+
+            - name: STUDENT
+              value: Luka Badzek
+
+            - name: COLLEGE
+              value: Algebra Bernays University
+
+---
+
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: tempconverter-service
+  namespace: tempconverter
+
+spec:
+  type: NodePort
+
+  selector:
+    app: tempconverter
+
+  ports:
+    - port: 80
+      targetPort: 5000

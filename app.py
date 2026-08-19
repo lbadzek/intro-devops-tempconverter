@@ -39,12 +39,15 @@ class TemperatureForm(FlaskForm):
     celsius = StringField('Celsius', validators=[InputRequired()])
     submit = SubmitField('Convert')
 
+def celsius_to_fahrenheit(celsius):
+    return round(((celsius * 1.8) + 32), 2)
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     form = TemperatureForm()
     if form.validate_on_submit():
         celsius = float(form.celsius.data)
-        fahrenheit = round(((celsius * 1.8) + 32),2)
+        fahrenheit = celsius_to_fahrenheit(celsius)
         temperature = Temperature(celsius=celsius, fahrenheit=fahrenheit, ip_address=request.remote_addr, user_agent=request.user_agent.string)
         db.session.add(temperature)
         db.session.commit()
