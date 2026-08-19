@@ -38,6 +38,7 @@ jobs:
       DB_NAME: tempconverter
       STUDENT: Luka Badzek
       COLLEGE: Algebra Bernays University
+      PYTHONPATH: .
 
     steps:
       - name: Checkout repository
